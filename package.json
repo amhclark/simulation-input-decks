@@ -1,0 +1,86 @@
+{
+  "name": "simulation-input-decks",
+  "displayName": "Simulation Input Decks",
+  "description": "Support for simulation input decks with customizable rulers for .fem and .rad files",
+  "version": "0.0.1",
+  "publisher": "aidan-clark",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amhclark/simulation-input-decks"
+  },
+  "engines": {
+    "vscode": "^1.86.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "fem",
+    "rad",
+    "simulation",
+    "rulers",
+    "formatting"
+  ],
+  "activationEvents": [
+    "onLanguage:fem",
+    "onLanguage:rad"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "fem",
+        "extensions": [
+          ".fem"
+        ],
+        "configuration": "./fem-language-configuration.json"
+      },
+      {
+        "id": "rad",
+        "extensions": [
+          ".rad"
+        ],
+        "configuration": "./rad-language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "Simulation Input Decks",
+      "properties": {
+        "simulationInputDecks.femRulers": {
+          "type": "array",
+          "default": [8, 16, 24, 32, 40, 48, 56, 64, 72, 80],
+          "description": "Ruler positions for .fem files"
+        },
+        "simulationInputDecks.radRulers": {
+          "type": "array",
+          "default": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+          "description": "Ruler positions for .rad files"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.86.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.9"
+  },
+  "dependencies": {
+    "code": "^5.2.4"
+  }
+}
