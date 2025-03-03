@@ -8,9 +8,6 @@ A Visual Studio Code extension that provides support for simulation input deck f
 - Automatic ruler placement for `.rad` files (every 10 characters by default)
 - Customizable ruler positions through settings
 - Language support for `.fem` and `.rad` files
-- File-specific comment support:
-  - `.fem` files: Line comments with `$`
-  - `.rad` files: Line comments with `#`
 
 ## Installation
 
@@ -38,9 +35,6 @@ Default settings:
 
 1. Open or create a file with `.fem` or `.rad` extension
 2. Rulers will automatically appear at the configured positions
-3. Use comments based on file type:
-   - In `.fem` files: Use `$` for line comments
-   - In `.rad` files: Use `#` for line comments
 
 ## License
 

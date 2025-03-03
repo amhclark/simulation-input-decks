@@ -2,7 +2,7 @@
   "name": "simulation-input-decks",
   "displayName": "Simulation Input Decks",
   "description": "Support for simulation input decks with customizable rulers for .fem and .rad files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "aidan-clark",
   "repository": {
     "type": "git",
