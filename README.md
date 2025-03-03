@@ -6,7 +6,6 @@ A Visual Studio Code extension that provides support for simulation input deck f
 
 - Automatic ruler placement for `.fem` files (every 8 characters by default)
 - Automatic ruler placement for `.rad` files (every 10 characters by default)
-- Customizable ruler positions through settings
 - Language support for `.fem` and `.rad` files
 
 ## Installation
