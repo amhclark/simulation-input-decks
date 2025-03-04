@@ -38,14 +38,16 @@ function updateRulers(editor: vscode.TextEditor) {
 	const simConfig = vscode.workspace.getConfiguration('simulationInputDecks');
 	
 	if (fileName.endsWith('.fem')) {
-		const femRulers = simConfig.get<number[]>('femRulers') || [];
-		config.update('rulers', femRulers, vscode.ConfigurationTarget.Global);
+		// Generate rulers every 8 spaces up to 160 characters
+		const femRulers = Array.from({ length: 20 }, (_, i) => (i + 1) * 8);
+		config.update('rulers', femRulers, vscode.ConfigurationTarget.Workspace);
 	} else if (fileName.endsWith('.rad')) {
-		const radRulers = simConfig.get<number[]>('radRulers') || [];
-		config.update('rulers', radRulers, vscode.ConfigurationTarget.Global);
+		// Generate rulers every 10 spaces up to 160 characters
+		const radRulers = Array.from({ length: 16 }, (_, i) => (i + 1) * 10);
+		config.update('rulers', radRulers, vscode.ConfigurationTarget.Workspace);
 	} else {
 		// Reset rulers for other file types
-		config.update('rulers', [], vscode.ConfigurationTarget.Global);
+		config.update('rulers', [], vscode.ConfigurationTarget.Workspace);
 	}
 }
 

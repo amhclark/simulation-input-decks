@@ -1,8 +1,8 @@
 {
   "name": "simulation-input-decks",
   "displayName": "Simulation Input Decks",
-  "description": "Support for simulation input decks with customizable rulers for .fem and .rad files",
-  "version": "0.0.2",
+  "description": "Support for simulation input deck files (`.fem` and `.rad`), featuring customizable rulers for precise formatting",
+  "version": "0.0.3",
   "publisher": "aidan-clark",
   "repository": {
     "type": "git",
@@ -32,34 +32,15 @@
     "languages": [
       {
         "id": "fem",
-        "extensions": [
-          ".fem"
-        ],
+        "extensions": [".fem"],
         "configuration": "./fem-language-configuration.json"
       },
       {
         "id": "rad",
-        "extensions": [
-          ".rad"
-        ],
+        "extensions": [".rad"],
         "configuration": "./rad-language-configuration.json"
       }
-    ],
-    "configuration": {
-      "title": "Simulation Input Decks",
-      "properties": {
-        "simulationInputDecks.femRulers": {
-          "type": "array",
-          "default": [8, 16, 24, 32, 40, 48, 56, 64, 72, 80],
-          "description": "Ruler positions for .fem files"
-        },
-        "simulationInputDecks.radRulers": {
-          "type": "array",
-          "default": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-          "description": "Ruler positions for .rad files"
-        }
-      }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -79,8 +60,5 @@
     "typescript": "^5.3.3",
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.9"
-  },
-  "dependencies": {
-    "code": "^5.2.4"
   }
 }
