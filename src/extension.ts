@@ -69,9 +69,6 @@ function updateRulers(editor: vscode.TextEditor) {
 		console.log('Resetting rulers for non-FEM/RAD file');
 		config.update('rulers', [], vscode.ConfigurationTarget.Workspace);
 	}
-
-	// Force a refresh of the editor
-	vscode.commands.executeCommand('workbench.action.reloadWindow');
 }
 
 // This method is called when your extension is deactivated
