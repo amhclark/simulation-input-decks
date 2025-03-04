@@ -2,7 +2,7 @@
   "name": "simulation-input-decks",
   "displayName": "Simulation Input Decks",
   "description": "Support for simulation input deck files (`.fem` and `.rad`), featuring customizable rulers for precise formatting",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "aidan-clark",
   "repository": {
     "type": "git",
@@ -25,7 +25,8 @@
   ],
   "activationEvents": [
     "onLanguage:fem",
-    "onLanguage:rad"
+    "onLanguage:rad",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -39,6 +40,12 @@
         "id": "rad",
         "extensions": [".rad"],
         "configuration": "./rad-language-configuration.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "simulationInputDecks.updateRulers",
+        "title": "Update Rulers"
       }
     ]
   },

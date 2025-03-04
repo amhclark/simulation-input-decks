@@ -4,6 +4,17 @@ All notable changes to the "Simulation Input Decks" extension will be documented
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.4] - 2024-03-03
+### Added
+- Manual ruler update command for troubleshooting
+- Debug logging for better issue tracking
+- Extension activation on startup
+
+### Fixed
+- Fixed issue with rulers not appearing on initial load
+- Improved ruler update reliability
+- Added automatic editor refresh after ruler updates
+
 ## [0.0.3] - 2024-03-03
 ### Fixed
 - Fixed inconsistent ruler behavior in large files

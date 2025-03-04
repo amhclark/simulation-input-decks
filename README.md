@@ -7,6 +7,7 @@ A Visual Studio Code extension that provides support for simulation input deck f
 - Automatic ruler placement for `.fem` files (every 8 characters, up to 160 characters)
 - Automatic ruler placement for `.rad` files (every 10 characters, up to 160 characters)
 - Language support for `.fem` and `.rad` files
+- Manual ruler update command for troubleshooting
 
 ## Installation
 
@@ -36,6 +37,13 @@ Default settings:
 2. Rulers will automatically appear at the configured positions:
    - `.fem` files: Rulers at positions 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160
    - `.rad` files: Rulers at positions 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160
+
+### Troubleshooting
+
+If rulers don't appear automatically:
+1. Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS)
+2. Type "Update Rulers" and select the command
+3. The editor will reload and rulers should appear
 
 ## License
 
