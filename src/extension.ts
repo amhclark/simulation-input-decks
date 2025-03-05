@@ -1,73 +1,147 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Simulation Input Decks extension is now active');
 
+	// Set up initial settings
+	setupSettings();
+
 	// Register a provider for editor rulers
 	const editorChangeDisposable = vscode.window.onDidChangeActiveTextEditor((editor) => {
 		if (editor) {
 			console.log('Editor changed:', editor.document.fileName);
-			updateRulers(editor);
+			updateSettings(editor);
 		}
 	});
-
-	// Update rulers for the active editor when configuration changes
-	const configChangeDisposable = vscode.workspace.onDidChangeConfiguration((e) => {
-		if (e.affectsConfiguration('editor.rulers')) {
-			const editor = vscode.window.activeTextEditor;
-			if (editor) {
-				console.log('Configuration changed, updating rulers');
-				updateRulers(editor);
-			}
-		}
-	});
-
-	// Register the update rulers command
-	const updateRulersCommand = vscode.commands.registerCommand('simulationInputDecks.updateRulers', () => {
-		const editor = vscode.window.activeTextEditor;
-		if (editor) {
-			console.log('Manual ruler update triggered');
-			updateRulers(editor);
-		}
-	});
-
-	// Update rulers for the initial active editor
-	if (vscode.window.activeTextEditor) {
-		console.log('Initial editor:', vscode.window.activeTextEditor.document.fileName);
-		updateRulers(vscode.window.activeTextEditor);
-	}
 
 	// Add disposables to context
 	context.subscriptions.push(editorChangeDisposable);
-	context.subscriptions.push(configChangeDisposable);
-	context.subscriptions.push(updateRulersCommand);
 }
 
-function updateRulers(editor: vscode.TextEditor) {
-	const fileName = editor.document.fileName.toLowerCase();
-	console.log('Updating rulers for:', fileName);
+function setupSettings() {
+	try {
+		// Get the workspace folder
+		const workspaceFolders = vscode.workspace.workspaceFolders;
+		if (!workspaceFolders) {
+			console.log('No workspace folder found');
+			return;
+		}
 
-	// Get the workspace configuration
-	const config = vscode.workspace.getConfiguration('editor', editor.document.uri);
-	
-	if (fileName.endsWith('.fem')) {
-		// Generate rulers every 8 spaces up to 160 characters
-		const femRulers = Array.from({ length: 20 }, (_, i) => (i + 1) * 8);
-		console.log('Setting FEM rulers:', femRulers);
-		config.update('rulers', femRulers, vscode.ConfigurationTarget.Workspace);
-	} else if (fileName.endsWith('.rad')) {
-		// Generate rulers every 10 spaces up to 160 characters
-		const radRulers = Array.from({ length: 16 }, (_, i) => (i + 1) * 10);
-		console.log('Setting RAD rulers:', radRulers);
-		config.update('rulers', radRulers, vscode.ConfigurationTarget.Workspace);
-	} else {
-		// Reset rulers for other file types
-		console.log('Resetting rulers for non-FEM/RAD file');
-		config.update('rulers', [], vscode.ConfigurationTarget.Workspace);
+		// Create .vscode directory if it doesn't exist
+		const vscodeDir = path.join(workspaceFolders[0].uri.fsPath, '.vscode');
+		if (!fs.existsSync(vscodeDir)) {
+			fs.mkdirSync(vscodeDir);
+		}
+
+		// Path to settings.json
+		const settingsPath = path.join(vscodeDir, 'settings.json');
+
+		// Default settings
+		const defaultSettings = {
+			"[fem]": {
+				"editor.rulers": Array.from({ length: 20 }, (_, i) => (i + 1) * 8)
+			},
+			"[rad]": {
+				"editor.rulers": Array.from({ length: 16 }, (_, i) => (i + 1) * 10)
+			},
+			"files.associations": {
+				"*.fem": "fem",
+				"*.rad": "rad"
+			}
+		};
+
+		// Read existing settings if they exist
+		let currentSettings = {};
+		if (fs.existsSync(settingsPath)) {
+			const settingsContent = fs.readFileSync(settingsPath, 'utf8');
+			try {
+				currentSettings = JSON.parse(settingsContent);
+			} catch (e) {
+				console.error('Error parsing existing settings.json:', e);
+			}
+		}
+
+		// Merge existing settings with our defaults
+		const mergedSettings = {
+			...currentSettings,
+			...defaultSettings
+		};
+
+		// Write the merged settings back to settings.json
+		fs.writeFileSync(settingsPath, JSON.stringify(mergedSettings, null, 4));
+		console.log('Settings updated successfully');
+
+	} catch (err) {
+		console.error('Error setting up settings:', err);
+	}
+}
+
+async function updateSettings(editor: vscode.TextEditor) {
+	const fileName = editor.document.fileName.toLowerCase();
+	console.log('Updating settings for:', fileName);
+
+	try {
+		// Get file extension in a cross-platform way
+		const ext = path.extname(fileName).toLowerCase();
+		console.log('File extension:', ext);
+		
+		// Determine if we have a workspace open
+		const hasWorkspace = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0;
+		if (!hasWorkspace) {
+			console.log('No workspace open, skipping settings update');
+			return;
+		}
+
+		// Get the workspace folder
+		const workspaceFolder = vscode.workspace.workspaceFolders![0];
+		const vscodeDir = path.join(workspaceFolder.uri.fsPath, '.vscode');
+		const settingsPath = path.join(vscodeDir, 'settings.json');
+
+		// Read current settings
+		let currentSettings: {
+			'[fem]'?: { 'editor.rulers': number[] };
+			'[rad]'?: { 'editor.rulers': number[] };
+			'files.associations'?: { [key: string]: string };
+		} = {};
+
+		if (fs.existsSync(settingsPath)) {
+			const settingsContent = fs.readFileSync(settingsPath, 'utf8');
+			try {
+				currentSettings = JSON.parse(settingsContent);
+			} catch (e) {
+				console.error('Error parsing settings.json:', e);
+			}
+		}
+
+		// Update settings based on file type
+		if (ext === '.fem') {
+			currentSettings['[fem]'] = {
+				'editor.rulers': Array.from({ length: 20 }, (_, i) => (i + 1) * 8)
+			};
+		} else if (ext === '.rad') {
+			currentSettings['[rad]'] = {
+				'editor.rulers': Array.from({ length: 16 }, (_, i) => (i + 1) * 10)
+			};
+		}
+
+		// Ensure file associations are set
+		currentSettings['files.associations'] = {
+			'*.fem': 'fem',
+			'*.rad': 'rad'
+		};
+
+		// Write the updated settings back to settings.json
+		fs.writeFileSync(settingsPath, JSON.stringify(currentSettings, null, 4));
+		console.log('Settings updated successfully');
+
+	} catch (err) {
+		console.error('Error updating settings:', err);
 	}
 }
 

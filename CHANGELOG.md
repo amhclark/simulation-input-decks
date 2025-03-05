@@ -4,6 +4,13 @@ All notable changes to the "Simulation Input Decks" extension will be documented
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.6] - 2024-03-03
+### Changed
+- Completely rewrote ruler management to use VS Code's language-specific settings
+- Added automatic creation and management of workspace settings.json
+- Improved Windows compatibility for ruler positions
+- Added proper file associations for .fem and .rad files
+
 ## [0.0.5] - 2024-03-03
 ### Fixed
 - Removed constant window reloading that made the extension unusable
