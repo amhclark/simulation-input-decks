@@ -4,6 +4,11 @@ All notable changes to the "Simulation Input Decks" extension will be documented
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.7] - 2024-03-03
+### Changed
+- Added explicit removal of rulers for non-fem/rad files
+- Improved handling of global ruler settings
+
 ## [0.0.6] - 2024-03-03
 ### Changed
 - Completely rewrote ruler management to use VS Code's language-specific settings

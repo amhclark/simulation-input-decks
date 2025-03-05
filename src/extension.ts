@@ -108,6 +108,7 @@ async function updateSettings(editor: vscode.TextEditor) {
 			'[fem]'?: { 'editor.rulers': number[] };
 			'[rad]'?: { 'editor.rulers': number[] };
 			'files.associations'?: { [key: string]: string };
+			'editor.rulers'?: number[];
 		} = {};
 
 		if (fs.existsSync(settingsPath)) {
@@ -124,10 +125,19 @@ async function updateSettings(editor: vscode.TextEditor) {
 			currentSettings['[fem]'] = {
 				'editor.rulers': Array.from({ length: 20 }, (_, i) => (i + 1) * 8)
 			};
+			// Remove global rulers
+			delete currentSettings['editor.rulers'];
 		} else if (ext === '.rad') {
 			currentSettings['[rad]'] = {
 				'editor.rulers': Array.from({ length: 16 }, (_, i) => (i + 1) * 10)
 			};
+			// Remove global rulers
+			delete currentSettings['editor.rulers'];
+		} else {
+			// For non-fem/rad files, ensure no rulers are set
+			delete currentSettings['[fem]'];
+			delete currentSettings['[rad]'];
+			delete currentSettings['editor.rulers'];
 		}
 
 		// Ensure file associations are set
